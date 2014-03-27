@@ -34,25 +34,39 @@ void Gpio_Init(void);
 #define SENSOR                  (*((volatile unsigned long *)0x4002400C))
 
 struct State {
-  unsigned long Out; 			// PB7-4 to right motor, PB3-0 to left
+  unsigned long Out; 			// PB5-3 to west light, PB2-0 to south light
   unsigned long Time;			// in 10ms units    
-  unsigned long Next[4];	// input 0x00 means ok,
-													//       0x01 means right side bumped something,
-													//       0x02 means left side bumped something,
-													//       0x03 means head-on collision (both sides bumped something)
+  unsigned long Next[8];	// input 0x00 means no cars or pedestrians,
+													//       0x01 means cars on west and no pedestrians,
+													//       0x02 means cars on south and no pedestrians,
+													//       0x03 means cars on west and south,
+													//       0x04 means pedestrians and no cars,
+													//       0x05 means pedestrians and cars on west,	
+													//       0x06 means pedestrians and cars on south,
+													//       0x07 means pedestrians and cars on west and south,	
 }; 
 typedef const struct State STyp;
 
-#define goN   0
-#define waitN 1
-#define goE   2
-#define waitE 3
+#define goW   	0
+#define waitW 	1
+#define goS   	2
+#define waitS 	3
+#define goP			4
+#define waitAll	5
+#define	flashP1	6
+#define flashP2	7
+#define flashP3	8
 
-STyp FSM[4]={
- {0x21,3000,{goN,waitN,goN,waitN}},	// S0) initial state and state where bumpers are checked
- {0x22, 500,{goE,goE,goE,goE}},			// S1) both forward [1]
- {0x0C,3000,{goE,goE,waitE,waitE}},	// S2) both forward [2]
- {0x14, 500,{goN,goN,goN,goN}}			// S2) both forward [2]
+STyp FSM[9]={
+ {0x0C, 100,{goW,goW,waitW,waitW,waitW,waitW,waitW,waitW}},												// S0) West green, South red, Walk red
+ {0x14, 100,{waitAll,waitAll,waitAll,waitAll,waitAll,waitAll,waitAll,goS}},				// S1) West yellow, South red, Walk red
+ {0x21, 100,{goS,waitS,goS,waitS,waitS,waitS,waitS,waitS}},												// S2) West red, South green, Walk red
+ {0x22, 100,{waitAll,waitAll,waitAll,waitAll,waitAll,waitAll,waitAll,goP}},				// S3) West red, South yellow, Walk red
+ {0x24, 100,{goP,flashP1,flashP1,flashP1,goP,flashP1,flashP1,waitAll}},						// S4) West red, South red, Walk green
+ {0x24, 100,{waitAll,goW,goS,goW,goP,goP,goP,flashP1}},														// S5) West red, South red, Walk red
+ {0x24, 100,{flashP2,flashP2,flashP2,flashP2,flashP2,flashP2,flashP2,flashP2}},		// S6) West red, South red, Walk off
+ {0x24, 100,{flashP3,flashP3,flashP3,flashP3,flashP3,flashP3,flashP3,flashP3}},		// S7) West red, South red, Walk red
+ {0x24, 100,{waitAll,waitAll,waitAll,waitAll,waitAll,waitAll,waitAll,goW}}				// S8) West red, South red, Walk off
 };		
 
 unsigned long cState;  // index to the current state 
@@ -68,12 +82,14 @@ int main(void){
   SysTick_Init();   // Program 10.2
 	Gpio_Init();
   
-  cState = goN; // Initial state
+  cState = waitAll; // Initial state
 	
   EnableInterrupts();
   while(1){
 		// output based on current state
 		GPIO_PORTB_DATA_R = FSM[cState].Out;
+		// output PF3 and PF1
+		
 		// wait for time according to state
     SysTick_Wait10ms(FSM[cState].Time);
     // get input
@@ -84,7 +100,7 @@ int main(void){
 }
 
 void Gpio_Init(void){ volatile unsigned long delay;
-  SYSCTL_RCGC2_R |= 0x12;          // 1) activate Port B and E
+  SYSCTL_RCGC2_R |= 0x22;          // 1) activate Port B, E and F
   delay = SYSCTL_RCGC2_R;          // allow time for clock to stabilize
                                    // 2) no need to unlock
   GPIO_PORTB_AMSEL_R &= ~0xFF;     // 3) disable analog functionality on PB7-0
@@ -94,15 +110,19 @@ void Gpio_Init(void){ volatile unsigned long delay;
   GPIO_PORTB_DR8R_R |= 0xFF;       // enable 8 mA drive on PB7-0
   GPIO_PORTB_DEN_R |= 0xFF;        // 7) enable digital I/O on PB7-0
 	
-	GPIO_PORTB_AMSEL_R &= ~0x3F; // 3) disable analog function on PB5-0
-  GPIO_PORTB_PCTL_R &= ~0x00FFFFFF; // 4) enable regular GPIO
-  GPIO_PORTB_DIR_R |= 0x3F;    // 5) outputs on PB5-0
-  GPIO_PORTB_AFSEL_R &= ~0x3F; // 6) regular function on PB5-0
-  GPIO_PORTB_DEN_R |= 0x3F;    // 7) enable digital on PB5-0
+	GPIO_PORTE_AMSEL_R &= ~0x07;     // 8) disable analog function on PE2-0
+  GPIO_PORTE_PCTL_R &= ~0x000000FF;// 9) configure PE2-0 as GPIO
+  GPIO_PORTE_DIR_R &= ~0x07;       // 10) make PE2-0 in
+  GPIO_PORTE_AFSEL_R &= ~0x07;     // 11) disable alt funct on PE2-0
+  GPIO_PORTE_DEN_R |= 0x07;        // 12) enable digital I/O on PE2-0
 	
-	GPIO_PORTE_AMSEL_R &= ~0x03;     // 8) disable analog function on PE1-0
-  GPIO_PORTE_PCTL_R &= ~0x000000FF;// 9) configure PE1-0 as GPIO
-  GPIO_PORTE_DIR_R &= ~0x03;       // 10) make PE1-0 in
-  GPIO_PORTE_AFSEL_R &= ~0x03;     // 11) disable alt funct on PE1-0
-  GPIO_PORTE_DEN_R |= 0x03;        // 12) enable digital I/O on PE1-0
+	GPIO_PORTF_LOCK_R = 0x4C4F434B;  // 13) unlock PortF PF0  
+  GPIO_PORTF_CR_R |= 0x1F;         // allow changes to PF4-0       
+  GPIO_PORTF_AMSEL_R &= 0x00;      // 14) disable analog function
+  GPIO_PORTF_PCTL_R &= 0x00000000; // 15) GPIO clear bit PCTL  
+  GPIO_PORTF_DIR_R &= ~0x11;       // 16) PF4,PF0 input, PF3,PF2,PF1 output
+	GPIO_PORTF_DIR_R |= 0xE;
+  GPIO_PORTF_AFSEL_R &= 0x00;      // 17) no alternate function
+  GPIO_PORTF_PUR_R |= 0x11;        // enable pullup resistors on PF4,PF0       
+  GPIO_PORTF_DEN_R |= 0x1F;        // 18) enable digital pins PF4-PF0        
 }
