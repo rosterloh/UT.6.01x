@@ -1,10 +1,8 @@
 Dependencies for Project 'DMATimer', Target 'DMATimer': (DO NOT MODIFY !)
-F (.\startup.s)(0x506A35AF)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1" -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "startup.lst" --xref -o "startup.o" --depend "startup.d")
-F (.\DMATimer.c)(0x510363E6)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\.. -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary -Drvmdk -DPART_LM4F120H5QR -o "dmatimer.o" --omf_browse "dmatimer.crf" --depend "dmatimer.d")
-I (D:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x4F58EE2E)
-F (.\DMAtestmain.c)(0x510363E6)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\.. -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary -Drvmdk -DPART_LM4F120H5QR -o "dmatestmain.o" --omf_browse "dmatestmain.crf" --depend "dmatestmain.d")
-I (PLL.h)(0x50D1DDEB)
-I (DMATimer.h)(0x50E3A50C)
-I (D:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x4F58EE2E)
-F (.\PLL.c)(0x50D1DDC5)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\.. -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary -Drvmdk -DPART_LM4F120H5QR -o "pll.o" --omf_browse "pll.crf" --depend "pll.d")
-I (PLL.h)(0x50D1DDEB)
+F (.\startup.s)(0x53416DEB)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\DMATimer.c)(0x53416DE7)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\dmatimer.o --omf_browse .\dmatimer.crf --depend .\dmatimer.d)
+F (.\DMAtestmain.c)(0x53416DE9)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\dmatestmain.o --omf_browse .\dmatestmain.crf --depend .\dmatestmain.d)
+I (PLL.h)(0x53416DE9)
+I (DMATimer.h)(0x53416DE7)
+F (.\PLL.c)(0x53416DE9)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (PLL.h)(0x53416DE9)
