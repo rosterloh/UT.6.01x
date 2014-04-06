@@ -37,7 +37,7 @@
 void UART_Init(void){
 // as part of Lab 11, modify this program to use UART0 instead of UART1
 //                 switching from PC5,PC4 to PA1,PA0
-  /*
+  
   SYSCTL_RCGC1_R |= SYSCTL_RCGC1_UART0; // activate UART0
   SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOA; // activate port A
   UART0_CTL_R &= ~UART_CTL_UARTEN;      // disable UART
@@ -51,12 +51,12 @@ void UART_Init(void){
                                         // configure PA1,PA0 as UART0
   GPIO_PORTA_PCTL_R = (GPIO_PORTA_PCTL_R&0xFFFFFF00)+0x00000011;
   GPIO_PORTA_AMSEL_R &= ~0x03;          // disable analog functionality on PA1,PA0
-  */
+  /*
   SYSCTL_RCGC1_R |= SYSCTL_RCGC1_UART1; // activate UART1
   SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOC; // activate port C
   UART1_CTL_R &= ~UART_CTL_UARTEN;      // disable UART
-  UART1_IBRD_R = 43;  // 80,000,000/(16*115,200)) = 43.40278
-  UART1_FBRD_R = 26;  //6-bbit fraction, round(0.40278 * 64) = 26
+  UART1_IBRD_R = 43;  									// IBRD = int(80,000,000/(16*115,200)) = 43.40278
+  UART1_FBRD_R = 26;  									// FBRD = round(0.40278 * 64) = 26
                                         // 8 bit word length (no parity bits, one stop bit, FIFOs)
   UART1_LCRH_R = (UART_LCRH_WLEN_8|UART_LCRH_FEN);
   UART1_CTL_R |= UART_CTL_UARTEN;       // enable UART
@@ -65,6 +65,7 @@ void UART_Init(void){
                                         // configure PC5-4 as UART1
   GPIO_PORTC_PCTL_R = (GPIO_PORTC_PCTL_R&0xFF00FFFF)+0x00220000;
   GPIO_PORTC_AMSEL_R &= ~0x30;          // disable analog functionality on PC5-4
+	*/
 }
 
 //------------UART_InChar------------
@@ -73,10 +74,10 @@ void UART_Init(void){
 // Output: ASCII code for key typed
 unsigned char UART_InChar(void){
 // as part of Lab 11, modify this program to use UART0 instead of UART1
-  //while((UART0_FR_R&UART_FR_RXFE) != 0);
-  //return((unsigned char)(UART0_DR_R&0xFF));
-  while((UART1_FR_R&UART_FR_RXFE) != 0);
-  return((unsigned char)(UART1_DR_R&0xFF));  
+  while((UART0_FR_R&UART_FR_RXFE) != 0);
+  return((unsigned char)(UART0_DR_R&0xFF));
+  //while((UART1_FR_R&UART_FR_RXFE) != 0);
+  //return((unsigned char)(UART1_DR_R&0xFF));  
 }
 
 //------------UART_InCharNonBlocking------------
@@ -86,16 +87,16 @@ unsigned char UART_InChar(void){
 // Output: ASCII code for key typed or 0 if no character
 unsigned char UART_InCharNonBlocking(void){
 // as part of Lab 11, modify this program to use UART0 instead of UART1
-  /*if((UART0_FR_R&UART_FR_RXFE) == 0){
+  if((UART0_FR_R&UART_FR_RXFE) == 0){
     return((unsigned char)(UART0_DR_R&0xFF));
   } else{
     return 0;
-  }*/
-  if((UART1_FR_R&UART_FR_RXFE) == 0){
+  }
+  /*if((UART1_FR_R&UART_FR_RXFE) == 0){
     return((unsigned char)(UART1_DR_R&0xFF));
   } else{
     return 0;
-  }
+  }*/
 }
 
 //------------UART_OutChar------------
@@ -104,10 +105,10 @@ unsigned char UART_InCharNonBlocking(void){
 // Output: none
 void UART_OutChar(unsigned char data){
 // as part of Lab 11, modify this program to use UART0 instead of UART1
-  /*while((UART0_FR_R&UART_FR_TXFF) != 0);
-  UART0_DR_R = data;*/
-  while((UART1_FR_R&UART_FR_TXFF) != 0);
-  UART1_DR_R = data;
+  while((UART0_FR_R&UART_FR_TXFF) != 0);
+  UART0_DR_R = data;
+  //while((UART1_FR_R&UART_FR_TXFF) != 0);
+  //UART1_DR_R = data;
 }
 
 //------------UART_InUDec------------
