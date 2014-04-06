@@ -48,7 +48,7 @@
 #define SYSCTL_RCC2_OSCSRC2_MO  0x00000000  // MOSC
 
 // configure the system to get its clock from the PLL
-void PLL_Init(void){
+void PLL_Init2(void){
   // 0) Use RCC2
   SYSCTL_RCC2_R |=  0x80000000;  // USERCC2
   // 1) bypass PLL while initializing
