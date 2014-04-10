@@ -213,3 +213,19 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+#ignore Keil stuff
+*.o
+*.htm
+*.uvgui
+*.uvopt
+*.uvproj
+*.crf
+*.plg
+*.tra
+*.d
+*.axf
+*.lnp
+*.map
+*.dep
+*.lst
