@@ -5,6 +5,21 @@
 // Daniel Valvano, Jonathan Valvano
 // March 13, 2014
 
+enum Notes {
+	A,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+};
+
+#define C 9556 		// 80Mhz/(523.251*16) = 9555.6435
+#define D 8513		// 80Mhz/(587.330*16) = 8513.1017
+#define E 7584		// 80Mhz/(659.255*16) = 7584.3187
+#define G 6378		// 80Mhz/(783.991*16) = 6577.6242
+
 // **************Sound_Init*********************
 // Initialize Systick periodic interrupts
 // Also initializes DAC
