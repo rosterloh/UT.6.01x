@@ -23,7 +23,7 @@ void Piano_Init(void){ volatile unsigned long delay;
   GPIO_PORTE_PCTL_R &= ~0x0000FFFF;// configure PE3-0 as GPIO
   GPIO_PORTE_DIR_R &= ~0x0F;       // make PE3-0 in
   GPIO_PORTE_AFSEL_R &= ~0x0F;     // disable alt funct on PE3-0
-	GPIO_PORTF_PUR_R |= 0x0F;        // enable pull-up on PE3-0
+	//GPIO_PORTE_PDR_R |= 0x0F;        // enable pull-down on PE3-0
   GPIO_PORTE_DEN_R |= 0x0F;        // enable digital I/O on PE3-0
 }
 // **************Piano_In*********************
