@@ -1,1 +1,0 @@
-.\dmatimer.o: DMATimer.c

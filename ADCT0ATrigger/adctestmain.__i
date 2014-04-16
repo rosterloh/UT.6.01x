@@ -1,0 +1,1 @@
+-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\.. -I C:\Keil\ARM\RV31\Inc -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -Drvmdk -DPART_LM4F120H5QR -o "adctestmain.o" --omf_browse "adctestmain.crf" --depend "adctestmain.d" "ADCTestmain.c"
